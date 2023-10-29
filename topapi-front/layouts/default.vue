@@ -1,4 +1,5 @@
 <script setup>
+import LoginDialog from "~/components/dialogs/LoginDialog.vue";
 </script>
 
 <template>
@@ -14,11 +15,9 @@
           TopApi
         </span>
         <v-spacer />
-<!--        <MainMenu v-if="authenticated" />-->
-        <template >
-          <v-btn @click="authDialog = true"> Войти </v-btn>
-        </template>
-      </v-app-bar>
+        <LoginActivator/>
+     </v-app-bar>
+      <LoginDialog/>
       <v-main class="mt-2">
         <slot />
       </v-main>
@@ -26,4 +25,16 @@
   </div>
 </template>
 
-<style scoped></style>
+<style>
+a {
+  text-decoration: none;
+}
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+</style>
