@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+  /**
+   * @param Request $request
+   * @return \Illuminate\Http\JsonResponse|\Illuminate\Support\MessageBag
+   */
   public function register(Request $request)
   {
     $validator = Validator::make($request->all(), [
@@ -21,13 +25,20 @@ class UserController extends Controller
     if($validator->fails()){
       return $validator->errors();
     }
-    $input = $request->all();
+    if (User::whereEmail($request->email)->first()) {
+      return response()->json(['error' => 'Пользователь с таким email уже зарегистрирован!']);
+    }
+    $input = $request->except(['password_confirmation']);
     $input['password'] = bcrypt($input['password']);
     $user = User::create($input);
     $success['token'] =  $user->createToken('TopApi')->accessToken;
     return response()->json($success);
   }
 
+  /**
+   * @param Request $request
+   * @return \Illuminate\Http\JsonResponse
+   */
   public function login(Request $request)
   {
     if(Auth::attempt($request->only('email', 'password'))){
@@ -36,10 +47,13 @@ class UserController extends Controller
       $success['user'] = new UserResource($user);
       return response()->json($success);
     } else {
-      return response()->json(['error' => 'Unauthorised'], 403);
+      return response()->json(['error' => 'Unauthorised'], 401);
     }
   }
 
+  /**
+   * @return \Illuminate\Http\JsonResponse
+   */
   public function details()
   {
     $user = User::find(Auth::id());

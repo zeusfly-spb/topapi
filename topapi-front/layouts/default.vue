@@ -1,5 +1,6 @@
 <script setup>
 import LoginDialog from "~/components/dialogs/LoginDialog.vue";
+import RegisterDialog from "~/components/dialogs/RegisterDialog.vue";
 </script>
 
 <template>
@@ -17,7 +18,9 @@ import LoginDialog from "~/components/dialogs/LoginDialog.vue";
         <v-spacer />
         <LoginActivator/>
      </v-app-bar>
+      <SnackBar/>
       <LoginDialog/>
+      <RegisterDialog/>
       <v-main class="mt-2">
         <slot />
       </v-main>
@@ -26,6 +29,14 @@ import LoginDialog from "~/components/dialogs/LoginDialog.vue";
 </template>
 
 <style>
+.inactive {
+  color: #6200EE;
+  opacity: .6;
+  cursor: pointer;
+}
+.inactive:hover {
+  opacity: 1;
+}
 a {
   text-decoration: none;
 }

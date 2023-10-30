@@ -1,25 +1,25 @@
 <template>
   <div>
     <v-dialog
-      v-model="loginDialog"
+      v-model="registerDialog"
       :persistent="true"
       :width="modalWidth"
     >
       <v-form
-        @submit.prevent="smartLogin"
+        @submit.prevent="smartRegister"
       >
         <v-card>
           <v-card-title>
             <v-row
-              class="flex-row justify-center"
+              class="flex-row"
             >
-              <h3 class="ma-3">Вход</h3>
+              <h3 class="mt-3 ml-3">Регистрация</h3>
               <h3
                 class="ma-3 inactive"
                 title="Регистрировать пользователя"
-                @click="goRegister"
+                @click="goLogin"
               >
-                Регистрация
+                Вход
               </h3>
               <v-spacer/>
               <v-icon
@@ -43,21 +43,33 @@
             >
               <template v-slot:append-inner>
                 <v-icon
-                  :title="`${showPassword ? 'Скрыть' : 'Показать'} пароль`"
                   :icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                   @click="showPassword = !showPassword"
                 />
               </template>
             </v-text-field>
+            <v-text-field
+              label="Повтор пароля"
+              v-model="password_confirmation"
+              type="password"
+            >
+              <template v-slot:append-inner>
+                <v-icon
+                  v-if="passwordConfirmValid"
+                  color="green"
+                  icon="mdi-check-bold"
+                  title="Правильный повтор пароля"
+                />
+              </template>
+            </v-text-field>
           </v-card-text>
-          <v-card-actions
-            class="text-center"
-          >
+          <v-card-actions>
             <v-spacer/>
             <v-btn
-              type="submit"
+              :disabled="!valid"
+              @click="smartRegister"
             >
-              Вход
+              Зарегистрировать
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -70,48 +82,48 @@
 import {useMainStore} from "~/store/main.js";
 import {storeToRefs} from "pinia";
 import {useDisplay} from "vuetify";
-
-const {loginDialog, registerDialog, email, password, user} = storeToRefs(useMainStore());
-const {login} = useMainStore();
-import {useMessagesStore} from "~/store/messages.js";
 import {taFetch} from "~/composables/taFetch.js";
+import {useMessagesStore} from "~/store/messages.js";
 
 const {show} = useMessagesStore();
-const showPassword = ref(false);
+const {loginDialog, registerDialog, email, password, password_confirmation} = storeToRefs(useMainStore());
+const {validEmail} = useMainStore();
 const { name } = useDisplay();
 const displayMode = computed(() => name.value);
 const modalWidth = computed(() => wideScreen.value ? '30%' : '100%');
 const wideScreen = computed(() => ['xl', 'xxl'].includes(displayMode.value));
-const close = () => loginDialog.value = false;
-const smartLogin = async () => {
+const showPassword = ref(false);
+
+const isValidEmail = computed(() => validEmail(email.value));
+const passwordConfirmValid = computed(() => password.value === password_confirmation.value);
+const valid = computed(() => isValidEmail.value && !!password.value && passwordConfirmValid.value);
+const close = () => registerDialog.value = false;
+const goLogin = async () => {
+  close();
+  loginDialog.value = true;
+};
+const smartRegister = async () =>  {
   try {
-    const {data: {_rawValue}} = await taFetch('/auth/login', {
+    const {data: {_rawValue}} = await taFetch('/auth/register', {
       method: 'POST',
       body: {
         email: email.value,
-        password: password.value
+        password: password.value,
+        password_confirmation: password_confirmation.value
       }
     });
-    if (_rawValue.user) {
-      user.value = _rawValue.user;
-    }
     if (_rawValue.token) {
-      const token_cookie = useCookie("top_api_token");
-      token_cookie.value = _rawValue.token;
+      show({message: 'Вы успешно зарегистрировались.'});
+      close();
     }
-    loginDialog.value = false;
-    await navigateTo('/home');
-    show({message: 'Вы успешно авторизовались в системе'});
+    if (_rawValue.error) {
+      show({message: _rawValue.error, color: 'error'});
+    }
   } catch (e) {
-    show({message: 'Ошибка авторизации! Проверьте правильность данных', color: 'error'});
+    show({color: 'error', message: 'Ошибка регистрации! Проверьте правильность данных'});
     console.error(e);
   }
 
-
-}
-const goRegister = () => {
-  loginDialog.value = false;
-  registerDialog.value = true;
 }
 </script>
 
