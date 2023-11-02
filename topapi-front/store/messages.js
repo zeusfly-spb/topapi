@@ -13,4 +13,4 @@ export const useMessagesStore = defineStore("messages", {
       this.active = true;
     }
   }
-})
+});

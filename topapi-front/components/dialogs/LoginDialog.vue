@@ -55,7 +55,8 @@
           >
             <v-spacer/>
             <v-btn
-              type="submit"
+              :disabled="!validLogin"
+              @click="smartLogin"
             >
               Вход
             </v-btn>
@@ -82,6 +83,7 @@ const { name } = useDisplay();
 const displayMode = computed(() => name.value);
 const modalWidth = computed(() => wideScreen.value ? '30%' : '100%');
 const wideScreen = computed(() => ['xl', 'xxl'].includes(displayMode.value));
+const validLogin = computed(() => !!email.value && !!password.value);
 const close = () => loginDialog.value = false;
 const smartLogin = async () => {
   try {
@@ -106,8 +108,6 @@ const smartLogin = async () => {
     show({message: 'Ошибка авторизации! Проверьте правильность данных', color: 'error'});
     console.error(e);
   }
-
-
 }
 const goRegister = () => {
   loginDialog.value = false;

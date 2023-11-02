@@ -22,6 +22,7 @@ export const useMainStore = defineStore("main", {
     },
   },
   getters: {
+    userEmail: state => state?.user?.email || 'undefined',
     authorized: state => !!state.user,
     validEmail: state => example => {
       const pattern =

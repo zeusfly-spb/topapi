@@ -13,6 +13,7 @@
 <script setup>
 import {useMainStore} from "~/store/main.js";
 
+const route = useRoute();
 const { user, autostart, authorized } = storeToRefs(useMainStore());
 const token = computed(() => {
   const tokenCookie = useCookie("top_api_token");
@@ -31,7 +32,14 @@ watchEffect(async () => {
       data: { _rawValue },
     } = await useFetch(detailsPath, { method: "GET", headers });
     user.value = _rawValue;
+    if (route.name !== 'home') {
+      await navigateTo('/home');
+    }
   }
-
 });
 </script>
+<style>
+.touchable {
+  cursor: pointer;
+}
+</style>

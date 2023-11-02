@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -20,5 +21,6 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:api')->group( function () {
-    Route::get('details', [UserController::class, 'details']);
+  Route::apiResource('project-groups', ProjectGroupController::class);
+  Route::get('details', [UserController::class, 'details']);
 });

@@ -95,7 +95,7 @@ const wideScreen = computed(() => ['xl', 'xxl'].includes(displayMode.value));
 const showPassword = ref(false);
 
 const isValidEmail = computed(() => validEmail(email.value));
-const passwordConfirmValid = computed(() => password.value === password_confirmation.value);
+const passwordConfirmValid = computed(() => !!password.value && password.value === password_confirmation.value);
 const valid = computed(() => isValidEmail.value && !!password.value && passwordConfirmValid.value);
 const close = () => registerDialog.value = false;
 const goLogin = async () => {

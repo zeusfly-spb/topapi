@@ -1,6 +1,8 @@
 <script setup>
 import LoginDialog from "~/components/dialogs/LoginDialog.vue";
 import RegisterDialog from "~/components/dialogs/RegisterDialog.vue";
+import GroupDialog from "~/components/dialogs/GroupDialog.vue";
+import DeleteDialog from "~/components/dialogs/DeleteDialog.vue";
 </script>
 
 <template>
@@ -21,6 +23,8 @@ import RegisterDialog from "~/components/dialogs/RegisterDialog.vue";
       <SnackBar/>
       <LoginDialog/>
       <RegisterDialog/>
+      <GroupDialog/>
+      <DeleteDialog/>
       <v-main class="mt-2">
         <slot />
       </v-main>

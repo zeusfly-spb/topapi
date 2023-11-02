@@ -6,7 +6,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost/api',
-      storageBase: process.env.NUXT_PUBLIC_API_BASE.slice(0, -4) + '/storage'
+      storageBase: process.env.NUXT_PUBLIC_API_BASE.slice(0, -4) + '/storage',
+      imageBase: process.env.NUXT_PUBLIC_API_BASE.slice(0, -4) + '/img',
     }
   },
   build: {
