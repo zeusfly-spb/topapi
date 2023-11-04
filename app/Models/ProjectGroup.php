@@ -12,8 +12,19 @@ class ProjectGroup extends Model
 
   protected $casts = ['active' => 'boolean'];
 
+  /**
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+   */
   public function user()
   {
     return $this->belongsTo(User::class);
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   */
+  public function projects()
+  {
+    return $this->hasMany(Project::class, 'project_group_id')->orderByDesc('id');
   }
 }

@@ -10,17 +10,8 @@
       >
         <v-card>
           <v-card-title>
-            <v-row
-              class="flex-row justify-center"
-            >
-              <h3 class="ma-3">Вход</h3>
-              <h3
-                class="ma-3 inactive"
-                title="Регистрировать пользователя"
-                @click="goRegister"
-              >
-                Регистрация
-              </h3>
+            <v-row>
+              <div class="ml-5 mt-3 text-h6">Вход</div>
               <v-spacer/>
               <v-icon
                 title="Закрыть"
@@ -50,15 +41,22 @@
               </template>
             </v-text-field>
           </v-card-text>
-          <v-card-actions
-            class="text-center"
-          >
+          <v-card-actions>
+            <a
+              @click.prevent="goRegister"
+              href="#"
+              class="ml-5"
+              title="Регистрироваться в системе"
+            >
+              Регистрация
+            </a>
             <v-spacer/>
             <v-btn
+              class="ma-3"
               :disabled="!validLogin"
               @click="smartLogin"
             >
-              Вход
+              Войти
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -79,10 +77,8 @@ import {taFetch} from "~/composables/taFetch.js";
 
 const {show} = useMessagesStore();
 const showPassword = ref(false);
-const { name } = useDisplay();
-const displayMode = computed(() => name.value);
-const modalWidth = computed(() => wideScreen.value ? '30%' : '100%');
-const wideScreen = computed(() => ['xl', 'xxl'].includes(displayMode.value));
+const {mobile} = useDisplay();
+const modalWidth = computed(() => mobile.value ? '100%' : '30%');
 const validLogin = computed(() => !!email.value && !!password.value);
 const close = () => loginDialog.value = false;
 const smartLogin = async () => {
@@ -108,7 +104,7 @@ const smartLogin = async () => {
     show({message: 'Ошибка авторизации! Проверьте правильность данных', color: 'error'});
     console.error(e);
   }
-}
+};
 const goRegister = () => {
   loginDialog.value = false;
   registerDialog.value = true;

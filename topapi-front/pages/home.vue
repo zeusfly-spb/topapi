@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-navigation-drawer>
+    <v-navigation-drawer
+      v-model="drawer"
+    >
       <v-list-item
         :prepend-avatar="userAvatarPath"
         :title="userEmail"
@@ -14,9 +16,11 @@
             title="Группы проектов"
           >
             <v-expansion-panel-text>
-              <v-list>
+              <v-list
+                density="compact"
+              >
                 <v-list-item
-                  class="touchable fade"
+                  class="touchable"
                   :class="{active: item.value === activeGroupId}"
                   v-for="(item, index) in projectGroups"
                   :key="index"
@@ -55,6 +59,54 @@
         </v-expansion-panels>
       </v-list>
     </v-navigation-drawer>
+    <v-col
+      v-if="activeGroup"
+    >
+      <div>Название группы: <strong>{{ activeGroup.name || '' }}</strong></div>
+      <v-row
+        class="flex-lg-row-reverse"
+      >
+        <v-btn
+          @click="showProjectDialog"
+          class="pa-3 ma-3"
+        >
+          <template v-slot:prepend>
+            <v-icon>
+              mdi-plus
+            </v-icon>
+          </template>
+          Создать проект
+        </v-btn>
+      </v-row>
+      <v-table
+        density="compact"
+      >
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>Название</th>
+            <th>Дневной объем заданий</th>
+            <th>Количество повторных заходов</th>
+            <th>Дата создания</th>
+            <th>Ключи</th>
+            <th>Статус</th>
+            <th
+              style="text-align: right"
+            >
+              Действия
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ProjectRow
+            v-for="(item, index) in projectList"
+            :project="item"
+            :key="index"
+          />
+        </tbody>
+      </v-table>
+    </v-col>
+
   </div>
 </template>
 
@@ -64,10 +116,11 @@ import {useMainStore} from "~/store/main.js";
 import {useResourceStore} from "~/store/resource.js";
 
 const resourceStore = useResourceStore();
-const {groupDialog, activeGroupId, editingGroup} = storeToRefs(resourceStore);
+const {groupDialog, projectDialog, activeGroupId, editingGroup, activeGroup} = storeToRefs(resourceStore);
 const {moveToEdit, moveToDelete} = resourceStore;
 const {authorized, userEmail, user} = useMainStore();
 const config = useRuntimeConfig();
+const projectList = computed(() => resourceStore.projects);
 const userAvatarPath = computed(() => {
   if (user.value && user.value.avatar) {
     return config.public.storageBase + '/' + user.value.avatar;
@@ -75,8 +128,10 @@ const userAvatarPath = computed(() => {
     return config.public.imageBase + '/default.jpg';
   }
 });
+const drawer = ref(true);
 const projectGroups = computed(() =>
   resourceStore.projectGroups.map(item => ({title: item.name, value: item.id})));
+const showProjectDialog = () => projectDialog.value = true;
 const edit = () => moveToEdit();
 const showDeleteDialog = () => moveToDelete();
 const select = id => activeGroupId.value = id;
@@ -92,11 +147,5 @@ onMounted(() => setTimeout(() => getGroups(), 100));
 <style lang="css" scoped>
 .active {
   background-color: #e4e4e4;
-}
-.fade {
-
-}
-.fade:hover {
-  background-color: #f4f4f4;
 }
 </style>

@@ -22,7 +22,6 @@ const token = computed(() => {
 const config = useRuntimeConfig();
 watchEffect(async () => {
   if (token.value && !authorized.value && autostart.value) {
-    console.log('Auto authenticate');
     const headers = new Headers();
     headers.set("Content-Type", "application/json");
     headers.set("Accept", "application/json");
@@ -40,6 +39,10 @@ watchEffect(async () => {
 </script>
 <style>
 .touchable {
+  opacity: .8;
   cursor: pointer;
+}
+.touchable:hover {
+  opacity: 1;
 }
 </style>

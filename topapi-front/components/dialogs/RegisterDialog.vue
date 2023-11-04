@@ -10,17 +10,8 @@
       >
         <v-card>
           <v-card-title>
-            <v-row
-              class="flex-row"
-            >
-              <h3 class="mt-3 ml-3">Регистрация</h3>
-              <h3
-                class="ma-3 inactive"
-                title="Регистрировать пользователя"
-                @click="goLogin"
-              >
-                Вход
-              </h3>
+            <v-row>
+              <div class="ml-5 mt-3 text-h6">Регистрация</div>
               <v-spacer/>
               <v-icon
                 title="Закрыть"
@@ -64,6 +55,14 @@
             </v-text-field>
           </v-card-text>
           <v-card-actions>
+            <a
+              @click.prevent="goLogin"
+              href="#"
+              class="ml-5"
+              title="Войти в систему"
+            >
+              Вход
+            </a>
             <v-spacer/>
             <v-btn
               :disabled="!valid"
@@ -88,12 +87,9 @@ import {useMessagesStore} from "~/store/messages.js";
 const {show} = useMessagesStore();
 const {loginDialog, registerDialog, email, password, password_confirmation} = storeToRefs(useMainStore());
 const {validEmail} = useMainStore();
-const { name } = useDisplay();
-const displayMode = computed(() => name.value);
-const modalWidth = computed(() => wideScreen.value ? '30%' : '100%');
-const wideScreen = computed(() => ['xl', 'xxl'].includes(displayMode.value));
+const {mobile} = useDisplay();
+const modalWidth = computed(() => mobile.value ? '100%' : '30%');
 const showPassword = ref(false);
-
 const isValidEmail = computed(() => validEmail(email.value));
 const passwordConfirmValid = computed(() => !!password.value && password.value === password_confirmation.value);
 const valid = computed(() => isValidEmail.value && !!password.value && passwordConfirmValid.value);

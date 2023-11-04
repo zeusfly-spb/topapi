@@ -3,19 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProjectGroupResource;
+use App\Http\Resources\ProjectResource;
+use App\Models\Project;
 use App\Models\ProjectGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ProjectGroupController extends Controller
+class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(ProjectGroupResource::collection(ProjectGroup::with('projects')
-          ->where('user_id', Auth::id())->get()));
+        //
     }
 
     /**
@@ -23,12 +24,9 @@ class ProjectGroupController extends Controller
      */
     public function store(Request $request)
     {
-      $group = ProjectGroup::create([
-        'name' => $request->name,
-        'comment' => $request->comment,
-        'user_id' => Auth::id()
-      ]);
-      return response()->json(new ProjectGroupResource($group));
+      $projectGroup = ProjectGroup::where('user_id', Auth::id())->where('id', $request->project_group_id)->first();
+      $project = $projectGroup->projects()->create(['name' => $request->name]);
+      return response()->json(new ProjectResource($project));
     }
 
     /**
@@ -39,20 +37,15 @@ class ProjectGroupController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-      $group = ProjectGroup::find($id);
-      if ($group->user_id <> Auth::id()) {
-        return null;
-      }
-      $group->update([
-        'name' => $request->name,
-        'comment' => $request->comment
-      ]);
-      return response()->json(new ProjectGroupResource($group));
+      $project = Project::find($id);
+      $project->update($request->all());
+      return response()->json(new ProjectResource($project));
     }
 
     /**
@@ -60,6 +53,6 @@ class ProjectGroupController extends Controller
      */
     public function destroy(string $id)
     {
-        return ProjectGroup::find($id)->delete();
+      return Project::find($id)->delete();
     }
 }

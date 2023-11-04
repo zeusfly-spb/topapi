@@ -3,6 +3,7 @@ import LoginDialog from "~/components/dialogs/LoginDialog.vue";
 import RegisterDialog from "~/components/dialogs/RegisterDialog.vue";
 import GroupDialog from "~/components/dialogs/GroupDialog.vue";
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue";
+import ProjectDialog from "~/components/dialogs/ProjectDialog.vue";
 </script>
 
 <template>
@@ -24,6 +25,7 @@ import DeleteDialog from "~/components/dialogs/DeleteDialog.vue";
       <LoginDialog/>
       <RegisterDialog/>
       <GroupDialog/>
+      <ProjectDialog/>
       <DeleteDialog/>
       <v-main class="mt-2">
         <slot />
