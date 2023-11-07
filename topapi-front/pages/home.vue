@@ -8,56 +8,63 @@
         :title="userEmail"
       />
       <v-divider/>
-      <v-list density="compact">
         <v-expansion-panels
+          class="mt-3"
           variant="accordion"
         >
           <v-expansion-panel
             title="Группы проектов"
           >
             <v-expansion-panel-text>
-              <v-list
-                density="compact"
+              <div
+                class="touchable panel"
+                :class="{active: item.value === activeGroupId}"
+                v-for="(item, index) in projectGroups"
+                :key="index"
+                @click="select(item.value)"
               >
-                <v-list-item
-                  class="touchable"
-                  :class="{active: item.value === activeGroupId}"
-                  v-for="(item, index) in projectGroups"
-                  :key="index"
-                  @click="select(item.value)"
+                <span>{{item.title}}</span>
+                <v-spacer/>
+                <template
+                  v-if="item.value === activeGroupId"
                 >
-                  <v-list-item-title v-text="item.title"/>
-                  <template
-                    v-if="item.value === activeGroupId"
-                    v-slot:append
-                  >
-                    <v-icon
-                      icon="mdi-pencil"
-                      @click="edit"
-                    />
-                    <v-icon
-                      icon="mdi-close"
-                      @click="showDeleteDialog"
-                    />
-                  </template>
-                </v-list-item>
-              </v-list>
-              <v-btn
-                @click="showAddGroupDialog"
-                variant="text"
-                title="Создать группу проектов"
-              >
-                <template v-slot:prepend>
-                  <v-icon>
-                    mdi-plus
-                  </v-icon>
+                  <v-icon
+                    color="blue"
+                    class="touchable"
+                    icon="mdi-pencil"
+                    @click="edit"
+                    title="Редактировать"
+                  />
+                  <v-icon
+                    color="red"
+                    class="touchable"
+                    icon="mdi-close"
+                    @click="showDeleteDialog"
+                    title="Удалить"
+                  />
                 </template>
-                Создать
-              </v-btn>
+              </div>
+              <div
+                style="display: flex"
+                class="flex-lg-row-reverse"
+              >
+                <v-btn
+                  @click="showAddGroupDialog"
+                  variant="text"
+                  title="Создать группу проектов"
+                >
+                  <template v-slot:prepend>
+                    <v-icon>
+                      mdi-plus
+                    </v-icon>
+                  </template>
+                  Создать
+                </v-btn>
+              </div>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
-      </v-list>
+
     </v-navigation-drawer>
     <v-col
       v-if="activeGroup"
@@ -80,18 +87,31 @@
       </v-row>
       <v-table
         density="compact"
+        style="table-layout: fixed"
       >
         <thead>
           <tr>
-            <th>id</th>
-            <th>Название</th>
+            <th
+              style="text-align: right"
+            >
+              id
+            </th>
+            <th
+              style="text-align: center"
+            >
+              Название
+            </th>
             <th>Дневной объем заданий</th>
             <th>Количество повторных заходов</th>
             <th>Дата создания</th>
             <th>Ключи</th>
-            <th>Статус</th>
             <th
-              style="text-align: right"
+              class="cell"
+            >
+              Статус
+            </th>
+            <th
+              style="text-align: right;"
             >
               Действия
             </th>
@@ -106,7 +126,6 @@
         </tbody>
       </v-table>
     </v-col>
-
   </div>
 </template>
 
@@ -145,7 +164,30 @@ onMounted(() => setTimeout(() => getGroups(), 100));
 </script>
 
 <style lang="css" scoped>
+.panel {
+  padding: .3em;
+  display: flex;
+  align-content: space-between
+}
+.v-expansion-panel-text__wrapper{
+  padding: 0!important;
+}
 .active {
-  background-color: #e4e4e4;
+  background-color: #E0F2F1;
+}
+.v-expansion-panel-text__wrapper{
+  padding: 0!important;
+}
+.v-list-item--density-compact:not(.v-list-item--nav).v-list-item--one-line{
+  padding: 0!important;
+}
+.v-list {
+  padding: 0!important;
+}
+.v-list-item__content{
+  display: inline-flex!important;
+}
+.cell {
+  width: 140px!important;
 }
 </style>

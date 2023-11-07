@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('domain')->nullable();
             $table->string('key')->nullable();
             $table->boolean('active')->default(false);
-            $table->unsignedBigInteger('project_group_id');
+            $table->unsignedBigInteger('project_group_id')->index();
             $table->timestamps();
         });
     }

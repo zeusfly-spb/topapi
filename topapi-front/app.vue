@@ -31,7 +31,7 @@ watchEffect(async () => {
       data: { _rawValue },
     } = await useFetch(detailsPath, { method: "GET", headers });
     user.value = _rawValue;
-    if (route.name !== 'home') {
+    if (route && route.name !== 'home') {
       await navigateTo('/home');
     }
   }
@@ -39,10 +39,6 @@ watchEffect(async () => {
 </script>
 <style>
 .touchable {
-  opacity: .8;
   cursor: pointer;
-}
-.touchable:hover {
-  opacity: 1;
 }
 </style>

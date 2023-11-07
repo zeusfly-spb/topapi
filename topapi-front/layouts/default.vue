@@ -9,7 +9,9 @@ import ProjectDialog from "~/components/dialogs/ProjectDialog.vue";
 <template>
   <div>
     <v-app>
-      <v-app-bar>
+      <v-app-bar
+        density="compact"
+      >
         <span
           class="ml-5 unselectable"
           style="cursor: pointer"

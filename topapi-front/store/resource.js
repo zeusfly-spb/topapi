@@ -12,6 +12,14 @@ export const useResourceStore = defineStore("resource", {
     projectGroups: [],
   }),
   actions: {
+    async pauseProject(id) {
+      this.editingProject = this.projects.length && this.projects.find(project => project.id === id);
+      return await this.updateProject({active: false});
+    },
+    async startProject(id) {
+      this.editingProject = this.projects.length && this.projects.find(project => project.id === id);
+      return await this.updateProject({active: true});
+    },
     async updateProject(params) {
       const {data: {_rawValue}} = await taFetch('/projects/' + this.editingProject.id, {
         method: 'PUT',
