@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 60);
-            $table->string('domain')->nullable();
-            $table->unsignedTinyInteger('repeated_visits')->nullable();
-            $table->string('key')->nullable();
+            $table->string('keyword');
+            $table->unsignedBigInteger('frequency');
+            $table->unsignedInteger('position_before');
+            $table->unsignedInteger('target_position');
+            $table->float('ratio')->default(0.1);
             $table->boolean('active')->default(false);
-            $table->unsignedBigInteger('project_group_id')->index();
+            $table->unsignedBigInteger('project_id')->index();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('tasks');
     }
 };

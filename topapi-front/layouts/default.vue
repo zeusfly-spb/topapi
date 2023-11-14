@@ -4,6 +4,26 @@ import RegisterDialog from "~/components/dialogs/RegisterDialog.vue";
 import GroupDialog from "~/components/dialogs/GroupDialog.vue";
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue";
 import ProjectDialog from "~/components/dialogs/ProjectDialog.vue";
+import {useMainStore} from "~/store/main.js";
+const { user, autostart, authorized } = storeToRefs(useMainStore());
+const token = computed(() => {
+  const tokenCookie = useCookie("top_api_token");
+  return tokenCookie.value || null;
+});
+const config = useRuntimeConfig();
+watchEffect(async () => {
+  if (token.value && !authorized.value && autostart.value) {
+    const headers = new Headers();
+    headers.set("Content-Type", "application/json");
+    headers.set("Accept", "application/json");
+    headers.set("Authorization", `Bearer ${token.value}`);
+    const detailsPath = config.public.apiBase + "/details";
+    const {
+      data: { _rawValue },
+    } = await useFetch(detailsPath, { method: "GET", headers });
+    user.value = _rawValue;
+  }
+});
 </script>
 
 <template>

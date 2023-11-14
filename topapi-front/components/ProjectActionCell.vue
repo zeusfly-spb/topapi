@@ -4,6 +4,13 @@
   >
     <v-icon
       class="touchable"
+      color="#00BCD4"
+      icon="mdi-content-copy"
+      title="Копировать ссылку"
+      @click=""
+    />
+    <v-icon
+      class="touchable"
       :color="projectStatus ? 'orange' : 'green'"
       :icon="buttonIcon"
       :title="`${buttonTitle} ${projectName}`"

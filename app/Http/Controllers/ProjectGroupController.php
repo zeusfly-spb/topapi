@@ -28,6 +28,7 @@ class ProjectGroupController extends Controller
         'comment' => $request->comment,
         'user_id' => Auth::id()
       ]);
+      $group->load('projects');
       return response()->json(new ProjectGroupResource($group));
     }
 

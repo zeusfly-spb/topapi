@@ -5,27 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Task extends Model
 {
   use HasFactory;
 
   protected $guarded = [];
   protected $casts = ['active' => 'boolean'];
 
-
   /**
    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
    */
-  public function ProjectGroup()
+  public function project()
   {
-    return $this->belongsTo(ProjectGroup::class, 'project_group_id');
-  }
-
-  /**
-   * @return \Illuminate\Database\Eloquent\Relations\HasMany
-   */
-  public function tasks()
-  {
-    return $this->hasMany(Task::class);
+    return $this->belongsTo(Project::class);
   }
 }

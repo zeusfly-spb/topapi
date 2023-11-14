@@ -3,12 +3,15 @@
     <td
       class="id-field"
     >
-      {{project.id}}
+      {{ project.id }}
     </td>
     <td
       class="name-field"
     >
-      {{project.name}}
+      {{ project.name }}
+    </td>
+    <td>
+      {{ project.domain }}
     </td>
     <td
       style="max-width: 2em"
@@ -17,8 +20,9 @@
     <td>
     </td>
     <td>{{ createDate }}</td>
-    <td>
-    </td>
+    <ProjectTasksCell
+      :project="project"
+    />
     <td
       class="cell"
       :style="{color: project.active ? 'green' : 'red'}"

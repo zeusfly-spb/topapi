@@ -25,6 +25,6 @@ class ProjectGroup extends Model
    */
   public function projects()
   {
-    return $this->hasMany(Project::class, 'project_group_id')->orderByDesc('id');
+    return $this->hasMany(Project::class, 'project_group_id')->with('tasks')->orderByDesc('id');
   }
 }

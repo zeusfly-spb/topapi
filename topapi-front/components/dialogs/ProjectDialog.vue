@@ -30,6 +30,11 @@
             v-model="projectName"
             @keydown.enter="action"
           />
+          <v-text-field
+            label="Домен"
+            v-model="domain"
+            @keydown.enter="action"
+          />
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
@@ -69,6 +74,7 @@ import {useResourceStore} from "~/store/resource.js";
 import {useDisplay} from "vuetify";
 
 const projectName = ref('');
+const domain = ref('');
 const {projectDialog, editingProject, activeGroupId} = storeToRefs(useResourceStore());
 const {addProject, updateProject} = useResourceStore();
 const {mobile} = useDisplay();
@@ -76,9 +82,21 @@ const modalWidth = computed(() => mobile.value ? '100%' : '40%');
 const wndTitle = computed(() => editingProject.value ? 'Редактировать проект' : 'Добавить проект');
 const close = () => projectDialog.value = false;
 const valid = computed(() => !!projectName.value);
-const action = () => !!editingProject.value ? update() : add();
-const update = async () => await updateProject({name: projectName.value});
-const add = async () => await addProject({name: projectName.value, project_group_id: activeGroupId.value});
+const action = () => {
+  if (!valid.value) {
+    return;
+  }
+  !!editingProject.value ? update() : add();
+}
+const update = async () => await updateProject({
+  name: projectName.value,
+  domain: domain.value
+});
+const add = async () => await addProject({
+  name: projectName.value,
+  domain: domain.value,
+  project_group_id: activeGroupId.value
+});
 const reset = () => {
   editingProject.value = null;
   projectName.value = '';
